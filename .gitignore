@@ -1,0 +1,6 @@
+# 不需要同步到仓库的内容
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+~$*
