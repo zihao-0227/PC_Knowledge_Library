@@ -20,11 +20,14 @@ CLIENT_SECRET = os.environ["AZURE_CLIENT_SECRET"]
 
 # OneDrive 路径：默认 /KnowledgeLibrary，可通过 Secret 覆盖
 ONEDRIVE_ROOT = os.environ.get("ONEDRIVE_ROOT", "/drive/root:/KnowledgeLibrary")
-LOCAL_REPO = Path("/github/workspace")  # GitHub Actions 工作目录
+LOCAL_REPO = Path(os.environ.get("LOCAL_REPO_PATH", "/github/workspace"))  # 本地或 GitHub Actions 工作目录
 SYNC_LOG = LOCAL_REPO / ".github" / "sync_status.json"
 
 SCOPE = ["https://graph.microsoft.com/.default"]
 GRAPH_BASE = "https://graph.microsoft.com/v1.0"
+
+# OneDrive Drive ID（应用权限需要用 drive ID 而不是 /me 或 /users/{upn}）
+DRIVE_ID = os.environ.get("AZURE_DRIVE_ID", "b!K4wK9ZoVNkmnE1bHe97JzPppa1Pc24lKu4INPlht8NhY1WKODb6FRIGPv1cAeN3_")
 
 # ── 认证 ──────────────────────────────────────────────────
 def get_token():
@@ -49,8 +52,18 @@ def list_onedrive_files(token, folder_path=ONEDRIVE_ROOT):
     headers = {"Authorization": f"Bearer {token}"}
     files = []
 
+    drive_root = f"{GRAPH_BASE}/drives/{DRIVE_ID}/root"
+
     def recurse(path):
-        url = f"{GRAPH_BASE}/me{path}:/children"
+        # 路径格式处理：root 用 :，子路径用 /
+        if path == ":" or path == "":
+            endpoint = drive_root
+        elif path.startswith(":/"):
+            # 格式：:/文件夹名/子文件夹
+            endpoint = f"{drive_root}{path}"
+        else:
+            endpoint = f"{drive_root}{path}"
+        url = f"{endpoint}:/children"
         resp = requests.get(url, headers=headers)
         if resp.status_code != 200:
             print(f"  ⚠️ 无法读取 {path}: {resp.status_code} {resp.text[:200]}")
@@ -61,7 +74,8 @@ def list_onedrive_files(token, folder_path=ONEDRIVE_ROOT):
                 name = item["name"]
                 if name.startswith(".") or name in ("System Volume Information", "$RECYCLE.BIN"):
                     continue
-                sub_path = f"{path}:/{name}"
+                # 子路径用 / 分隔（只有第一个 : 是根路径标记）
+                sub_path = f"{path}/{name}"
                 recurse(sub_path)
             else:
                 files.append({
@@ -187,7 +201,7 @@ def main():
         else:
             # 没有 downloadUrl 的情况，用 content 端点
             headers = {"Authorization": f"Bearer {token}"}
-            url = f"{GRAPH_BASE}/me{rf['path']}:/content"
+            url = f"{drive_root}{rf['path']}:/content"
             resp = requests.get(url, headers=headers)
             if resp.status_code == 200:
                 local.parent.mkdir(parents=True, exist_ok=True)
