@@ -1,12 +1,13 @@
 # OneDrive → GitHub 知识库自动同步
-# 每周六 UTC 00:00 (北京时间 08:00) 运行
+# 每周三 UTC 00:00 (北京时间 08:00) 运行
+# 主子周末创作，周三在校时一次性同步所有更改
 # 使用 MSAL 客户端凭证模式获取 Graph API Token
 
 name: Sync from OneDrive
 
 on:
   schedule:
-    - cron: '0 0 * * 6'   # 每周六 08:00 CST
+    - cron: '0 0 * * 3'   # 每周三 08:00 CST
   workflow_dispatch:       # 也支持手动运行
 
 permissions:
