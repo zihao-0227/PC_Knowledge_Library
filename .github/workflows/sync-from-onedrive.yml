@@ -33,7 +33,6 @@ jobs:
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
           AZURE_DRIVE_ID: ${{ secrets.AZURE_DRIVE_ID }}
-          ONEDRIVE_ROOT: ${{ secrets.ONEDRIVE_ROOT || ':/PC_Knowledges_Library' }}
         run: python .github/scripts/sync_onedrive.py
 
       - name: Commit and push changes
