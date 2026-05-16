@@ -21,7 +21,9 @@ CLIENT_SECRET = os.environ["AZURE_CLIENT_SECRET"]
 
 # 要同步的 OneDrive 文件夹 ID（PC_Knowledges_Library）
 ROOT_FOLDER_ID = "016EIT54A47KP7N2LYZFALW4IIGA2Y7HLJ"
-LOCAL_REPO = Path(os.environ.get("LOCAL_REPO_PATH", "/github/workspace"))
+# 使用 GITHUB_WORKSPACE（GitHub Actions 自动设置）或默认路径
+GITHUB_WORKSPACE = os.environ.get("GITHUB_WORKSPACE", "/github/workspace")
+LOCAL_REPO = Path(os.environ.get("LOCAL_REPO_PATH", GITHUB_WORKSPACE))
 SYNC_LOG = LOCAL_REPO / ".github" / "sync_status.json"
 
 SCOPE = ["https://graph.microsoft.com/.default"]
