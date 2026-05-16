@@ -18,9 +18,7 @@
 
 ## 同步机制
 
-本仓库通过 GitHub Actions 自动从 OneDrive 同步内容，每周三 08:00（北京时间）自动更新。
-主子周末创作的内容将在周三到校时一次性同步。
-也支持手动触发同步（仓库 Actions → Sync from OneDrive → Run workflow）。
+本仓库通过 GitHub Actions 自动从 OneDrive 同步内容，每周六 08:00（北京时间）自动更新。
 
 ## 许可证
 
