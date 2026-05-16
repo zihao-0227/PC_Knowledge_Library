@@ -1,8 +1,8 @@
 {
-  "last_sync": "2026-05-16T06:30:35Z",
+  "last_sync": "2026-05-16T15:48:43Z",
   "downloaded": 0,
-  "skipped": 19,
+  "skipped": 23,
   "failed": 0,
-  "deleted": 0,
-  "total_remote": 19
+  "deleted": 3,
+  "total_remote": 23
 }
