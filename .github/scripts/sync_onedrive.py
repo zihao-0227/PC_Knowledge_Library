@@ -203,11 +203,17 @@ def main():
     print("\n🧹 检查已删除的文件...")
     remote_paths = {rf["path"] for rf in remote_files}
 
+    # 仓库基础设施文件——不在 OneDrive 中，但必须保留
+    PROTECTED_FILES = {"README.md", "LICENSE", ".gitignore"}
+    PROTECTED_PREFIXES = (".git", ".github")
+
     deleted = 0
     for local_file in LOCAL_REPO.rglob("*"):
         if local_file.is_file():
             relative = str(local_file.relative_to(LOCAL_REPO))
-            if relative.startswith(".git") or relative.startswith(".github"):
+            if any(relative.startswith(p) for p in PROTECTED_PREFIXES):
+                continue
+            if relative in PROTECTED_FILES:
                 continue
             if relative not in remote_paths:
                 local_file.unlink()
