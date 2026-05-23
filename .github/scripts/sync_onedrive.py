@@ -20,7 +20,8 @@ CLIENT_ID = os.environ["AZURE_CLIENT_ID"]
 CLIENT_SECRET = os.environ["AZURE_CLIENT_SECRET"]
 
 # 要同步的 OneDrive 文件夹 ID（PC_Knowledges_Library）
-ROOT_FOLDER_ID = "016EIT54A47KP7N2LYZFALW4IIGA2Y7HLJ"
+# 主子（孙梓豪）的 OneDrive
+ROOT_FOLDER_ID = "012NGUUTGUIEX7XCQZWJG2YYXTHNKB4T35"
 # 使用 GITHUB_WORKSPACE（GitHub Actions 自动设置）或默认路径
 GITHUB_WORKSPACE = os.environ.get("GITHUB_WORKSPACE", "/github/workspace")
 LOCAL_REPO = Path(os.environ.get("LOCAL_REPO_PATH", GITHUB_WORKSPACE))
@@ -30,7 +31,8 @@ SCOPE = ["https://graph.microsoft.com/.default"]
 GRAPH_BASE = "https://graph.microsoft.com/v1.0"
 
 # OneDrive Drive ID
-DRIVE_ID = os.environ.get("AZURE_DRIVE_ID", "b!K4wK9ZoVNkmnE1bHe97JzPppa1Pc24lKu4INPlht8NhY1WKODb6FRIGPv1cAeN3_")
+# 主子（孙梓豪）的 OneDrive
+DRIVE_ID = os.environ.get("AZURE_DRIVE_ID", "b!wS48PsmSfUeaRye7R1-TA3ZoBt8x3oNFm7Sw36_aPalPUNlhlwU_SLopxX6Q-Ni5")
 
 
 # ── 认证 ──────────────────────────────────────────────────
