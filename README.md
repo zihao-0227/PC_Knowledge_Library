@@ -21,7 +21,8 @@
 
 若你也想为本仓库贡献一份力量，可新建分支参与创作，完成后提交PR即可，仓库所有者会及时审核处理你的提交。
 
-> [!NOTE] 本仓库的工作原理
+> [!NOTE]
+> 本仓库的工作原理
 > Main分支由作者在OneDrive编写，通过Sync from OneDrive的GitHub Action在每周三进行同步。
 > 本仓库接入了作者的OpenClaw机器人，管理MingShou_Auto分支，遵循着同普通创作者的工作逻辑。
 
