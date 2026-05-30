@@ -1,12 +1,12 @@
 # OneDrive → GitHub 知识库自动同步
-# 每周三 UTC 00:00 (北京时间 08:00) 运行
+# 每周五 UTC 00:00 (北京时间 08:00) 运行
 # 使用 MSAL 客户端凭证模式获取 Graph API Token
 
 name: Sync from OneDrive
 
 on:
   schedule:
-    - cron: '0 0 * * 3'   # 每周三 08:00 CST
+    - cron: '0 0 * * 5'   # 每周五 08:00 CST
   workflow_dispatch:       # 也支持手动运行
 
 permissions:
@@ -38,7 +38,7 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git config user.name "暝烁 Bot"
+          git config user.name "曍烁 Bot"
           git config user.email "bot@knowledge-library.sync"
           git add -A
           git diff --cached --quiet || git commit -m "📚 自动同步 $(date '+%Y-%m-%d %H:%M')"
