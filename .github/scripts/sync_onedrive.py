@@ -217,6 +217,9 @@ def main():
                 continue
             if relative in PROTECTED_FILES:
                 continue
+            # 保护所有 index.md 文件（不在 OneDrive 中，由暝烁维护）
+            if os.path.basename(relative) == "index.md":
+                continue
             if relative not in remote_paths:
                 local_file.unlink()
                 deleted += 1
