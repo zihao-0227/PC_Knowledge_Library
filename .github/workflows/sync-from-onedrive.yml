@@ -38,7 +38,7 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git config user.name "曍烁 Bot"
+          git config user.name "暝烁 Bot"
           git config user.email "bot@knowledge-library.sync"
           git add -A
           git diff --cached --quiet || git commit -m "📚 自动同步 $(date '+%Y-%m-%d %H:%M')"
