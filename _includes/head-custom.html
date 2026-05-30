@@ -1,0 +1,74 @@
+<!-- Obsidian 提示块渲染脚本 -->
+<script>
+(function() {
+  'use strict';
+
+  const CALLOUT_TYPES = {
+    note: { icon: '📝', color: '#2a7ae2' },
+    tip: { icon: '💡', color: '#2e7d32' },
+    warning: { icon: '⚠️', color: '#e65100' },
+    caution: { icon: '⚡', color: '#c62828' },
+    danger: { icon: '🚫', color: '#b71c1c' },
+    info: { icon: 'ℹ️', color: '#1565c0' },
+    success: { icon: '✅', color: '#2e7d32' },
+    question: { icon: '❓', color: '#6a1b9a' }
+  };
+
+  function processCallouts() {
+    const blockquotes = document.querySelectorAll('.main-content blockquote, article blockquote');
+    const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    blockquotes.forEach(bq => {
+      // 检查是否已处理
+      if (bq.dataset.calloutProcessed) return;
+      
+      const text = bq.textContent.trim();
+      const match = text.match(/^\[!(\w+)\]\s*(.*?)(?:\n|$)/i);
+      if (!match) return;
+      
+      const type = match[1].toLowerCase();
+      const title = match[2] || type.charAt(0).toUpperCase() + type.slice(1);
+      const config = CALLOUT_TYPES[type] || CALLOUT_TYPES.note;
+      
+      const bg = isDark ? config.color + '22' : config.color + '15';
+      
+      const callout = document.createElement('div');
+      callout.className = 'callout callout-' + type;
+      callout.style.cssText = 'border-left:4px solid ' + config.color + ';background:' + bg + ';border-radius:6px;padding:12px 16px;margin:16px 0;';
+      
+      const header = document.createElement('div');
+      header.style.cssText = 'font-weight:600;color:' + config.color + ';margin-bottom:6px;font-size:0.95em;';
+      header.innerHTML = config.icon + ' ' + title;
+      
+      const content = document.createElement('div');
+      content.style.cssText = 'color:inherit;line-height:1.6;';
+      
+      let html = bq.innerHTML.replace(/^<p>\[\!\w+\][^<]*<\/p>/i, '');
+      content.innerHTML = html;
+      
+      callout.appendChild(header);
+      callout.appendChild(content);
+      bq.parentNode.replaceChild(callout, bq);
+      callout.dataset.calloutProcessed = 'true';
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', processCallouts);
+  } else {
+    processCallouts();
+  }
+})();
+</script>
+
+<!-- 暗黑模式自动切换样式 -->
+<style>
+@media (prefers-color-scheme: dark) {
+  .page-header { background: #0f3460 !important; }
+  .main-content code { background: #2d2d44 !important; color: #e0e0e0 !important; }
+  .main-content pre { background: #1e1e2e !important; border-color: #333 !important; }
+  .main-content table { color: #ccc; }
+  .main-content th { background: #1e1e3a; }
+  .main-content td { border-color: #333; }
+}
+</style>
