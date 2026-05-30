@@ -1,18 +1,4 @@
----
 title: 🧠 暝烁的知识库
-description: 主子（孙梓豪）的个人知识库
+description: 从0开始学习电脑使用
 theme: jekyll-theme-cayman
-lang: zh-CN
-markdown: kramdown
-highlighter: rouge
-exclude:
-  - .gitkeep
-  - sync_status.json
-  - LICENSE
-defaults:
-  - scope:
-      path: ""
-    values:
-      layout: default
-      author: 暝烁
-
+show_downloads: false
