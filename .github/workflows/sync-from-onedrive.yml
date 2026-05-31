@@ -1,13 +1,10 @@
-# OneDrive → GitHub 知识库自动同步
-# 每周五/六/日 20:00 (北京时间) 运行
-# 使用 MSAL 客户端凭证模式获取 Graph API Token
-
 name: Sync from OneDrive
 
 on:
   schedule:
-    - cron: '0 12 * * 5,6,0'   # 每周五/六/日 20:00 CST
-  workflow_dispatch:       # 也支持手动运行
+    - cron: '0 18 * * 5,6'
+    - cron: '0 14 * * 0'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -16,30 +13,16 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: pip install msal requests
-
-      - name: Sync from OneDrive
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install msal requests
+      - run: python .github/scripts/sync_onedrive.py
         env:
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
           AZURE_DRIVE_ID: ${{ secrets.AZURE_DRIVE_ID }}
-          LOCAL_REPO_PATH: ${{ github.workspace }}
-        run: python .github/scripts/sync_onedrive.py
-
-      - name: Commit and push changes
-        run: |
-          git config user.name "暝烁 Bot"
-          git config user.email "bot@knowledge-library.sync"
-          git add -A
-          git diff --cached --quiet || git commit -m "📚 自动同步 \$(date '+%Y-%m-%d %H:%M')\"
-          git push
+      - run: |
+          git config user.name bot && git config user.email bot@sync.dev
+          git add -A && git diff --cached --quiet || git commit -m sync && git push
