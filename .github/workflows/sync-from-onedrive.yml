@@ -25,4 +25,5 @@ jobs:
           AZURE_DRIVE_ID: ${{ secrets.AZURE_DRIVE_ID }}
       - run: |
           git config user.name bot && git config user.email bot@sync.dev
+                    git checkout HEAD -- 购买记/认识计算机操作系统.md
           git add -A && git diff --cached --quiet || git commit -m sync && git push
