@@ -8,21 +8,59 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
-      - run: pip install msal requests
-      - run: python .github/scripts/sync_onedrive.py
+      
+      - name: Install dependencies
+        run: pip install msal requests
+      
+      - name: Run sync script (OneDrive → GitHub)
+        run: python .github/scripts/sync_onedrive.py
         env:
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
           AZURE_DRIVE_ID: ${{ secrets.AZURE_DRIVE_ID }}
-      - run: |
-          git config user.name bot && git config user.email bot@sync.dev
-          git add -A && git diff --cached --quiet || git commit -m sync && git push
+      
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No changes to sync"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected"
+          fi
+      
+      - name: Create Sync Branch and Pull Request
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          BRANCH="sync/onedrive-$(date +%Y%m%d%H%M%S)"
+          git config user.name "bot"
+          git config user.email "bot@sync.dev"
+          git checkout -b "$BRANCH"
+          git commit -m "sync: OneDrive → GitHub 自动同步"
+          git push origin "$BRANCH"
+          
+          # 创建 PR（使用 gh CLI，GitHub Actions 自带）
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "📥 OneDrive → GitHub 自动同步" \
+            --body "由 OneDrive 同步触发的自动更新。\n\n- 来源：OneDrive/PC_Knowledges_Library\n- 触发时间：$(date '+%Y-%m-%d %H:%M:%S')\n- 该 PR 将自动合并" \
+            --label auto-sync
+          
+          # 自动合并（如果分支保护允许）
+          gh pr merge "$BRANCH" --auto --squash --delete-branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
