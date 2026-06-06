@@ -52,6 +52,6 @@ jobs:
           git commit -m "sync: OneDrive -> GitHub auto sync"
           git push origin "$BRANCH"
           PR_URL=$(gh pr create --base main --head "$BRANCH" --fill)
-          gh pr merge "$PR_URL" --auto --squash --delete-branch
+          gh pr merge "$PR_URL" --squash --delete-branch
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
