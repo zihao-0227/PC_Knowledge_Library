@@ -58,7 +58,6 @@ jobs:
             --head "$BRANCH" \
             --title "📥 OneDrive → GitHub 自动同步" \
             --body "由 OneDrive 同步触发的自动更新。\n\n- 来源：OneDrive/PC_Knowledges_Library\n- 触发时间：$(date '+%Y-%m-%d %H:%M:%S')\n- 该 PR 将自动合并" \
-            --label auto-sync
           
           # 自动合并（如果分支保护允许）
           gh pr merge "$BRANCH" --auto --squash --delete-branch
