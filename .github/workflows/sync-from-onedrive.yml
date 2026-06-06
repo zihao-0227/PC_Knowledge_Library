@@ -1,33 +1,43 @@
-name: Sync from OneDrive
+name: OneDrive Sync
 
 on:
   schedule:
     - cron: '0 18 * * 5,6'
     - cron: '0 14 * * 0'
+  push:
+    branches: [main]
   workflow_dispatch:
+    inputs:
+      direction:
+        description: 'Sync direction'
+        required: false
+        default: 'both'
+        type: choice
+        options:
+          - both
+          - to-github
+          - to-onedrive
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  sync:
+  sync-to-github:
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.direction != 'to-onedrive')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
+      - run: pip install msal requests
       
-      - name: Install dependencies
-        run: pip install msal requests
-      
-      - name: Run sync script (OneDrive → GitHub)
+      - name: Sync OneDrive -> GitHub
         run: python .github/scripts/sync_onedrive.py
         env:
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_CLIENT_SECRET: *** secrets.AZURE_CLIENT_SECRET }}
           AZURE_DRIVE_ID: ${{ secrets.AZURE_DRIVE_ID }}
       
       - name: Check for changes
@@ -36,13 +46,11 @@ jobs:
           git add -A
           if git diff --cached --quiet; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "No changes to sync"
           else
             echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "Changes detected"
           fi
       
-      - name: Commit and Create Pull Request
+      - name: Create Pull Request and Merge
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           BRANCH="sync/onedrive-$(date +%Y%m%d%H%M%S)"
@@ -54,4 +62,21 @@ jobs:
           PR_URL=$(gh pr create --base main --head "$BRANCH" --fill)
           gh pr merge "$PR_URL" --squash --delete-branch
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: *** secrets.GH_PAT }}
+
+  sync-to-onedrive:
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.direction != 'to-github')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install msal requests
+      
+      - name: Sync GitHub -> OneDrive
+        run: python .github/scripts/sync_to_onedrive.py
+        env:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: *** secrets.AZURE_CLIENT_SECRET }}
+          AZURE_DRIVE_ID: ${{ secrets.AZURE_DRIVE_ID }}
