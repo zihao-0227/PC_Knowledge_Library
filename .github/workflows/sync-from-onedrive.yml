@@ -7,16 +7,6 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-    inputs:
-      direction:
-        description: 'Sync direction'
-        required: false
-        default: 'both'
-        type: choice
-        options:
-          - both
-          - to-github
-          - to-onedrive
 
 permissions:
   contents: write
@@ -24,14 +14,14 @@ permissions:
 
 jobs:
   sync-to-github:
-    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.direction != 'to-onedrive')
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - run: pip install msal requests
-      
+
       - name: Sync OneDrive -> GitHub
         run: python .github/scripts/sync_onedrive.py
         env:
@@ -39,7 +29,7 @@ jobs:
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: *** secrets.AZURE_CLIENT_SECRET }}
           AZURE_DRIVE_ID: ${{ secrets.AZURE_DRIVE_ID }}
-      
+
       - name: Check for changes
         id: check_changes
         run: |
@@ -49,7 +39,7 @@ jobs:
           else
             echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
-      
+
       - name: Create Pull Request and Merge
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
@@ -65,14 +55,14 @@ jobs:
           GH_TOKEN: *** secrets.GH_PAT }}
 
   sync-to-onedrive:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.direction != 'to-github')
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - run: pip install msal requests
-      
+
       - name: Sync GitHub -> OneDrive
         run: python .github/scripts/sync_to_onedrive.py
         env:
