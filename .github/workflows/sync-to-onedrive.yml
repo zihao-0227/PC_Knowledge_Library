@@ -1,0 +1,29 @@
+name: Sync to OneDrive
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      
+      - name: Install dependencies
+        run: pip install msal requests
+      
+      - name: Run reverse sync script (GitHub → OneDrive)
+        run: python .github/scripts/sync_to_onedrive.py
+        env:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_DRIVE_ID: ${{ secrets.AZURE_DRIVE_ID }}
