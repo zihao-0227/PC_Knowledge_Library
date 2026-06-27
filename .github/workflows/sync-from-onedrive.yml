@@ -1,72 +1,91 @@
-name: OneDrive Sync
+# OneDrive 鈫?GitHub 鐭ヨ瘑搴撹嚜鍔ㄥ悓姝?# 姣忓懆浜?鍏?18:00 UTC = 鍛ㄥ叚/鏃ュ噷鏅?02:00 CST
+# 姣忓懆鏃?14:00 UTC = 22:00 CST
+# 浣跨敤 MSAL 瀹㈡埛绔嚟璇佹ā寮忚幏鍙?Graph API Token
+# 娴佺▼锛歰nedrive-sync 鍒嗘敮 鈫?鑷姩 PR
+
+name: Sync from OneDrive
 
 on:
   schedule:
-    - cron: '0 18 * * 5,6'
-    - cron: '0 14 * * 0'
-  push:
-    branches: [main]
-  workflow_dispatch:
-
+    - cron: '0 18 * * 5,6'   # 鍛ㄥ叚/鏃ュ噷鏅?02:00 CST
+    - cron: '0 14 * * 0'     # 鍛ㄦ棩 22:00 CST
+  workflow_dispatch:       # 涔熸敮鎸佹墜鍔ㄨ繍琛?
 permissions:
   contents: write
-  pull-requests: write
+  pull-requests: write    # 闇€瑕佸垱寤?PR
+
+env:
+  SYNC_BRANCH: onedrive-sync
+  BASE_BRANCH: main
 
 jobs:
-  sync-to-github:
-    if: github.event_name != 'push'
+  sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: {python-version: '3.12'}
-      - run: pip install msal requests
+      - name: Checkout repo (fetch all branches)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 鎷夊彇鍏ㄩ儴鍘嗗彶锛屼互渚垮垏鎹㈠垎鏀?
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
-      - name: Sync OneDrive -> GitHub
-        run: python .github/scripts/sync_onedrive.py
-        env:
-          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          AZURE_DRIVE_ID: ${{ secrets.AZURE_DRIVE_ID }}
+      - name: Install dependencies
+        run: pip install msal requests
 
-      - name: Check for changes
-        id: check_changes
+      - name: Switch to sync branch
         run: |
-          git add -A
-          if git diff --cached --quiet; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
+          # 濡傛灉 onedrive-sync 鍒嗘敮宸插瓨鍦ㄥ垯鍒囨崲杩囧幓锛屽惁鍒欎粠 main 鍒涘缓
+          if git show-ref --verify --quiet refs/heads/${{ env.SYNC_BRANCH }}; then
+            git checkout ${{ env.SYNC_BRANCH }}
+            # 閲嶇疆鍒?main 鐨勮捣鐐癸紝淇濇寔骞插噣鐨勫熀纭€
+            git merge --no-edit origin/${{ env.BASE_BRANCH }} || true
           else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
+            git checkout -b ${{ env.SYNC_BRANCH }} origin/${{ env.BASE_BRANCH }}
           fi
 
-      - name: Create Pull Request and Merge
-        if: steps.check_changes.outputs.has_changes == 'true'
-        run: |
-          BRANCH="sync/onedrive-$(date +%Y%m%d%H%M%S)"
-          git config user.name "bot"
-          git config user.email "bot@sync.dev"
-          git checkout -b "$BRANCH"
-          git commit -m "sync: OneDrive -> GitHub auto sync"
-          git push origin "$BRANCH"
-          PR_URL=$(gh pr create --base main --head "$BRANCH" --fill)
-          gh pr merge "$PR_URL" --squash --delete-branch
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-
-  sync-to-onedrive:
-    if: github.event_name != 'schedule'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: {python-version: '3.12'}
-      - run: pip install msal requests
-
-      - name: Sync GitHub -> OneDrive
-        run: python .github/scripts/sync_to_onedrive.py
+      - name: Sync from OneDrive
         env:
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
           AZURE_DRIVE_ID: ${{ secrets.AZURE_DRIVE_ID }}
+          LOCAL_REPO_PATH: ${{ github.workspace }}
+        run: python .github/scripts/sync_onedrive.py
+
+      - name: Commit and push to sync branch
+        id: commit
+        run: |
+          git config user.name "鏆濈儊 Bot"
+          git config user.email "bot@knowledge-library.sync"
+          git add -A
+          git diff --cached --quiet
+          HAS_CHANGES=$?
+          echo "has_changes=$HAS_CHANGES" >> $GITHUB_OUTPUT
+          if [ "$HAS_CHANGES" -eq 1 ]; then
+            git commit -m "馃摎 OneDrive 鑷姩鍚屾 $(date '+%Y-%m-%d %H:%M')"
+            git push origin ${{ env.SYNC_BRANCH }}
+            echo "鉁?宸叉彁浜ゅ苟鎺ㄩ€佽嚦 ${{ env.SYNC_BRANCH }}"
+          else
+            echo "鈴笍  娌℃湁鍙樻洿锛岃烦杩囨彁浜?
+          fi
+
+      - name: Create PR if changes exist
+        if: steps.commit.outputs.has_changes == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # 妫€鏌ユ槸鍚﹀凡鏈変粠杩欎釜鍒嗘敮鍒?main 鐨勫紑鏀?PR
+          EXISTING_PR=$(gh pr list --head ${{ env.SYNC_BRANCH }} --base ${{ env.BASE_BRANCH }} --state open --json number --jq '.[0].number')
+          if [ -n "$EXISTING_PR" ]; then
+            echo "馃攧 PR #$EXISTING_PR 宸插瓨鍦紝鏇存柊 PR 鎻忚堪"
+            gh pr edit $EXISTING_PR --body "馃摎 OneDrive 鑷姩鍚屾 $(date '+%Y-%m-%d %H:%M')\n\n鏈鍚屾鐢?GitHub Actions 鑷姩瑙﹀彂銆?
+          else
+            echo "馃啎 鍒涘缓鏂扮殑 PR..."
+            gh pr create \
+              --head ${{ env.SYNC_BRANCH }} \
+              --base ${{ env.BASE_BRANCH }} \
+              --title "馃摎 OneDrive 鐭ヨ瘑搴撳悓姝?$(date '+%Y-%m-%d')" \
+              --body "馃摎 OneDrive 鑷姩鍚屾 $(date '+%Y-%m-%d %H:%M')\n\n鏈鍚屾鐢?GitHub Actions 鑷姩瑙﹀彂銆?
+          fi
