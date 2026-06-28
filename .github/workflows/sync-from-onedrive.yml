@@ -38,11 +38,12 @@ jobs:
 
       - name: Switch to sync branch
         run: |
-          # 如果 onedrive-sync 分支已存在则切换过去，否则从 main 创建
+          # 如果 onedrive-sync 分支已存在则直接切过去，否则从 main 创建
+          # 用 reset --hard 保持分支与 main 一致，避免 git merge 导致的冲突
           if git show-ref --verify --quiet refs/heads/${{ env.SYNC_BRANCH }}; then
             git checkout ${{ env.SYNC_BRANCH }}
-            # 重置到 main 的起点，保持干净的基线
-            git merge --no-edit origin/${{ env.BASE_BRANCH }} || true
+            # 强制重置到 main 的起点，保持干净的基线
+            git reset --hard origin/${{ env.BASE_BRANCH }}
           else
             git checkout -b ${{ env.SYNC_BRANCH }} origin/${{ env.BASE_BRANCH }}
           fi
