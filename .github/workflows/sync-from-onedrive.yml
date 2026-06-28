@@ -78,7 +78,7 @@ jobs:
       - name: Create PR if changes exist
         if: steps.commit.outputs.has_changes == '1'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           # 检查是否已有从这个分支到 main 的开放 PR
           EXISTING_PR=$(gh pr list --head ${{ env.SYNC_BRANCH }} --base ${{ env.BASE_BRANCH }} --state open --json number --jq '.[0].number')
