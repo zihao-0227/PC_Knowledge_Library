@@ -69,7 +69,7 @@ jobs:
           echo "has_changes=$HAS_CHANGES" >> $GITHUB_OUTPUT
           if [ "$HAS_CHANGES" -eq 1 ]; then
             git commit -m "📎 OneDrive 自动同步 $(date '+%Y-%m-%d %H:%M')"
-            git push origin ${{ env.SYNC_BRANCH }}
+            git push --force origin ${{ env.SYNC_BRANCH }}
             echo "✅ 已提交并推送至 ${{ env.SYNC_BRANCH }}"
           else
             echo "⏭️  没有变更，跳过提交"
@@ -85,11 +85,18 @@ jobs:
           if [ -n "$EXISTING_PR" ]; then
             echo "🔄 PR #$EXISTING_PR 已存在，更新 PR 描述"
             gh pr edit $EXISTING_PR --body "📎 OneDrive 自动同步 $(date '+%Y-%m-%d %H:%M')\n\n本次同步由 GitHub Actions 自动触发。"
+            PR_NUMBER=$EXISTING_PR
           else
             echo "🆕 创建新的 PR..."
-            gh pr create \
+            PR_URL=$(gh pr create \
               --head ${{ env.SYNC_BRANCH }} \
               --base ${{ env.BASE_BRANCH }} \
               --title "📎 OneDrive 知识库同步 $(date '+%Y-%m-%d')" \
-              --body "📎 OneDrive 自动同步 $(date '+%Y-%m-%d %H:%M')\n\n本次同步由 GitHub Actions 自动触发。"
+              --body "📎 OneDrive 自动同步 $(date '+%Y-%m-%d %H:%M')\n\n本次同步由 GitHub Actions 自动触发。")
+            PR_NUMBER=$(echo "$PR_URL" | grep -oP '\d+$')
+          fi
+          # 自动合并 PR 到 main（主子要求：无需人工审批，直接合并）
+          if [ -n "$PR_NUMBER" ]; then
+            echo "🚀 自动合并 PR #$PR_NUMBER..."
+            gh pr merge "$PR_NUMBER" --squash || echo "⚠️  自动合并失败，可能需要手动处理"
           fi
