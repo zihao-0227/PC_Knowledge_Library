@@ -1,6 +1,6 @@
 # PC_Knowledge_Library
 
-[[CONTRIBUTING]] | [[README(Simplified Chinese)]]
+[CONTRIBUTING](https://github.com/zihao-0227/PC_Knowledge_Library/blob/ZikiaH_Owner/CONTRIBUTING.md) | [README(Simplified Chinese)](https://github.com/zihao-0227/PC_Knowledge_Library/blob/ZikiaH_Owner/README\(Simplified%20Chinese\).md)
 
 ![GitHub|96](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)![GitHub Actions|161](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)![Markdown](https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white)![Obsidian](https://img.shields.io/badge/Obsidian-%23483699.svg?style=for-the-badge&logo=obsidian&logoColor=white)![OneDrive](https://img.shields.io/badge/OneDrive-0078D4.svg?style=for-the-badge&logo=microsoftonedrive&logoColor=white)
 
