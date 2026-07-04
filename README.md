@@ -1,36 +1,46 @@
-# 🧠 PC_Knowledge_Library
+# PC_Knowledge_Library
 
-你好，欢迎来到这里。
+[CONTRIBUTING](https://github.com/zihao-0227/PC_Knowledge_Library/blob/ZikiaH_Owner/CONTRIBUTING.md) | [README(Simplified Chinese)](https://github.com/zihao-0227/PC_Knowledge_Library/blob/ZikiaH_Owner/README\(Simplified%20Chinese\).md)
 
-智能手机时代，许多计算机上繁琐的操作已经被简化了。但，计算机依然是性能要求极高工作的得力工具；计算机依旧是许多大学生必不可少的工具之一。可是，由于后代们是在智能手机时代的环境下长大的，这就导致一个极为尴尬的现象：***年轻一代已经越来越不懂得如何使用电脑了***。
+![GitHub|96](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)![GitHub Actions|161](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)![Markdown](https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white)![Obsidian](https://img.shields.io/badge/Obsidian-%23483699.svg?style=for-the-badge&logo=obsidian&logoColor=white)![OneDrive](https://img.shields.io/badge/OneDrive-0078D4.svg?style=for-the-badge&logo=microsoftonedrive&logoColor=white)
 
-这个知识库，我将一个准大学生在从购买到使用再到维护与维修的顺序讲解与解答如何从0入门电脑。
+Hello,welcome to this repository!
 
-## 📚 全部文章
+In the era of smartphones,many of the tedious operation on the computer have been  simplified.However,computer is still the handy tool for high-performance work.But the younger generation grew up in the age of smartphones,this leads to a really embarrassing situation:***The new generation are knowing less about using computer.***
 
-| 分类 | 文章 | 说明 |
-|------|------|------|
-| **🛒 购买记** | [前述](./购买记/前述) | 购买电脑前的准备工作 |
-| | [认识计算机类型](./购买记/认识计算机类型) | 台式机/笔记本/一体机等类型介绍 |
-| | [认识计算机硬件](./购买记/认识计算机硬件) | CPU/GPU/内存/硬盘等硬件科普 |
-| | [认识计算机操作系统](./购买记/认识计算机操作系统) | Windows/macOS/Linux 系统选择 |
-| **🎮 使用记** | [常见的键盘快捷键](./使用记/常见的键盘快捷键) | 提高效率的快捷键汇总 |
-| | [子库规划](./使用记/开发者：《使用记》子库规划) | 使用记内容规划 |
-| **🌐 上网记** | [子库规划](./上网记/开发者：《上网记》子库规划) | 上网记内容规划 |
-| **📦 软件记** | [子库规划](./软件记/开发者：《软件记》子库规划) | 软件记内容规划 |
-| **🛠️ 维护记** | [子库规划](./维护记/开发者：《维护记》子库规划) | 维护记内容规划 |
-| **🔧 维修记** | [子库规划](./维修记/开发者：《维修记》子库规划) | 维修记内容规划 |
+This repository explains and answers how a prospective college student can get started with computers from scratch, covering everything from buying to using and maintaining them.
+
+## The Repository Architecture
+
+| Category | Explanation                                                                                                                       |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **购买记**  | Introducing to the concepts of computer hardware, operating systems and software,also provided guidance for checking the machine. |
+| **使用记**  | Introducing to using Windows OS, including system software, settings adjustments, and more.                                       |
+| **上网记**  | Introducing common browsers, search engines, and common internet concepts, as well as enhance online security awareness           |
+| **软件记**  | Introducing how to install, use, and uninstall software, as well as software recommendations                                      |
+| **维护记**  | Introducing common skills like reinstalling the system and cleaning up the C drive                                                |
+| **维修记**  | (Evaluating)                                                                                                                      |
 
 > [!TIP] 
-> 文章持续更新中，各分类的「子库规划」文件展示了该分类未来的内容方向。欢迎关注更新！
+> The article is continuously being updated, and the '子库规划' documents for each category show the future content direction of that category. Feel free to check back for updates!
 
-> [!NOTE] 
-> - `main` 分支由作者在 OneDrive 编写，通过 GitHub Action 每周自动同步
-> - `MingShou_Auto` 分支由OpenClaw机器人——暝烁管理，用于内容改进和 PR 提交
-> - 部分图片、文字、文档由 AI 辅助生成
-> - 本仓库采用 **CC BY-SA 4.0** 许可证
+## How To Contribute
 
-## 🔗 相关链接
+Please check out [[CONTRIBUTING]] for the contribution guide.
 
-- [GitHub 仓库](https://github.com/zihao-0227/PC_Knowledge_Library)
-- [开发者语法指南](./开发者：语法)
+## Licence
+
+[![licensebuttons by-sa](https://licensebuttons.net/l/by-sa/3.0/88x31.png)](https://creativecommons.org/licenses/by-sa/4.0)
+
+This repository uses the CC-BY-SA-4.0 license, which allows you to:
+
+- **Sharing** — Copying and reposing this repository through any medium and in any form. 
+- **Adapting** — Synthesizing, converting, and modifying this repository for any purpose, including commercial use.
+
+> [!warning] 
+> If you need to use or repost any articles from this repository, please credit the source.（[PC_Knowledge_Library](https://github.com/zihao-0227/PC_Knowledge_Library)）。
+
+## Related Links
+
+- [GitHub Repository](https://github.com/zihao-0227/PC_Knowledge_Library)
+- [GitHub Pages](https://zihao-0227.github.io/PC_Knowledge_Library/)
