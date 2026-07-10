@@ -24,7 +24,7 @@
 
 ## 如何贡献
 
-请参阅[[CONTRIBUTING]]以获得贡献指南
+请参阅[CONTRIBUTING](https://github.com/zihao-0227/PC_Knowledge_Library/blob/main/CONTRIBUTING.md)以获得贡献指南
 
 ## 许可证
 

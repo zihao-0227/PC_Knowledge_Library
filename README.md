@@ -26,7 +26,7 @@ This repository explains and answers how a prospective college student can get s
 
 ## How To Contribute
 
-Please check out [[CONTRIBUTING]] for the contribution guide.
+Please check out [CONTRIBUTING](https://github.com/zihao-0227/PC_Knowledge_Library/blob/main/CONTRIBUTING.md) for the contribution guide.
 
 ## Licence
 
@@ -38,7 +38,7 @@ This repository uses the CC-BY-SA-4.0 license, which allows you to:
 - **Adapting** — Synthesizing, converting, and modifying this repository for any purpose, including commercial use.
 
 > [!warning] 
-> If you need to use or repost any articles from this repository, please credit the source.（[PC_Knowledge_Library](https://github.com/zihao-0227/PC_Knowledge_Library)）。
+> If you need to use or repost any articles from this repository, please credit the source.([PC_Knowledge_Library](https://github.com/zihao-0227/PC_Knowledge_Library)).
 
 ## Related Links
 
