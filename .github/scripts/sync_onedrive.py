@@ -206,8 +206,13 @@ def main():
     remote_paths = {rf["path"] for rf in remote_files}
 
     # 仓库基础设施文件——不在 OneDrive 中，但必须保留
-    PROTECTED_FILES = {"README.md", "LICENSE", ".gitignore"}
-    PROTECTED_PREFIXES = (".git", ".github")
+    PROTECTED_FILES = {
+        "README.md", "LICENSE", ".gitignore",
+        "package.json", "package-lock.json", "quartz.config.yaml",
+        "tsconfig.json", "globals.d.ts", "index.d.ts",
+        "quartz.ts", ".node-version", ".npmrc",
+    }
+    PROTECTED_PREFIXES = (".git", ".github", "quartz/", "node_modules/", "public/")
 
     deleted = 0
     for local_file in LOCAL_REPO.rglob("*"):
