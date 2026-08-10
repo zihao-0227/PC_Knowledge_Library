@@ -12,8 +12,8 @@ configuration:
     - private
     - templates
     - .obsidian
-    - 开发者
-    - 该知识库的所有文件.base
+    - "**/开发者*"
+    - "**/该知识库的所有文件.base"
   theme:
     fontOrigin: googleFonts
     cdnCaching: true
