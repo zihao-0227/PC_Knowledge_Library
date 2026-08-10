@@ -5,3 +5,16 @@ Thumbs.db
 *.temp
 ~$*
 /.obsidian
+
+# Quartz 构建产物
+node_modules
+public
+prof
+tsconfig.tsbuildinfo
+.quartz-cache
+private/
+.replit
+replit.nix
+.quartz/
+quartz/cli/tui/dist/
+.turbo/
