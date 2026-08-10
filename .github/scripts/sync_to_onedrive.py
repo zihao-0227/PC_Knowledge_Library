@@ -250,9 +250,14 @@ def delete_onedrive_file(token, item_id, path_name):
 
 # ── 本地文件扫描 ──────────────────────────────────────────
 def list_local_files():
-    """扫描 GitHub 仓库中的所有文件（排除 .git 和 .github）"""
-    PROTECTED_PREFIXES = (".git", ".github")
-    PROTECTED_FILES = {"README.md", "LICENSE", ".gitignore"}
+    """扫描 GitHub 仓库中的所有文件（排除 .git、.github 和 Quartz 引擎文件）"""
+    PROTECTED_PREFIXES = (".git", ".github", "quartz/", "node_modules/", "public/")
+    PROTECTED_FILES = {
+        "README.md", "LICENSE", ".gitignore",
+        "package.json", "package-lock.json", "quartz.config.yaml",
+        "tsconfig.json", "globals.d.ts", "index.d.ts",
+        "quartz.ts", ".node-version", ".npmrc",
+    }
     
     files = []
     for local_file in sorted(LOCAL_REPO.rglob("*")):
