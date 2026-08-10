@@ -210,7 +210,7 @@ def main():
         "README.md", "LICENSE", ".gitignore",
         "package.json", "package-lock.json", "quartz.config.yaml",
         "tsconfig.json", "globals.d.ts", "index.d.ts",
-        ".node-version", ".npmrc",
+        "quartz.ts", ".node-version", ".npmrc",
     }
     PROTECTED_PREFIXES = (".git", ".github", "quartz/", "node_modules/", "public/")
 
