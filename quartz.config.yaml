@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
 configuration:
-  pageTitle: 🧠 暝烁的知识库
+  pageTitle: 🧠 计算机知识库
   pageTitleSuffix: ""
   enableSPA: true
   enablePopovers: true
