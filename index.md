@@ -41,36 +41,7 @@ title: 🧠 欢迎来到暝烁的知识库
 
 点击 📁 可展开/折叠，查看知识库的全部文章：
 
-{% assign all_dirs = "" | split: "," %}
-{% for p in site.pages %}
-  {% assign parts = p.path | split: "/" %}
-  {% if parts.size > 1 %}
-    {% assign d = parts[0] %}
-    {% unless all_dirs contains d %}
-      {% assign all_dirs = all_dirs | push: d %}
-    {% endunless %}
-  {% endif %}
-{% endfor %}
-
-{% assign sorted_dirs = all_dirs | sort %}
-{% for d in sorted_dirs %}
-{% if d != "引用图片" %}
-<details open>
-<summary>📁 {{ d }}</summary>
-<ul>
-{% for p in site.pages %}
-  {% assign parts = p.path | split: "/" %}
-  {% if parts.size == 2 and parts[0] == d %}
-    {% assign fn = parts[1] %}
-    {% unless fn == "index.md" %}
-    <li class="toc-file"><a href="{{ p.url | relative_url }}">📄 {{ fn | remove: ".md" | remove: ".markdown" }}</a></li>
-    {% endunless %}
-  {% endif %}
-{% endfor %}
-</ul>
-</details>
-{% endif %}
-{% endfor %}
+{% include toc.html %}
 
 ---
 

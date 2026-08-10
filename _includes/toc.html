@@ -1,0 +1,17 @@
+{%- assign kb_dirs = "购买记,使用记,上网记,软件记,维护记,维修记" | split: "," -%}
+{%- for d in kb_dirs -%}
+<details open>
+<summary>📁 {{ d }}</summary>
+<ul>
+{%- for p in site.pages -%}
+{%- assign parts = p.path | split: "/" -%}
+{%- if parts.size == 2 and parts[0] == d -%}
+{%- assign fn = parts[1] -%}
+{%- unless fn == "index.md" -%}
+<li class="toc-file"><a href="{{ p.url | relative_url }}">{{ fn | remove: ".md" | remove: ".markdown" }}</a></li>
+{%- endunless -%}
+{%- endif -%}
+{%- endfor -%}
+</ul>
+</details>
+{%- endfor -%}
