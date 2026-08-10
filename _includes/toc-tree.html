@@ -1,0 +1,46 @@
+{%- assign depth = include.depth | default: 0 -%}
+{%- assign dir = include.dir | default: "" -%}
+{%- assign pages = site.pages | sort: "path" -%}
+{%- assign subdirs = "" | split: "," -%}
+{%- assign dirpages = "" | split: "," -%}
+
+{%- for p in pages -%}
+  {%- assign rel = p.path -%}
+  {%- if dir != "" -%}
+    {%- assign rel = p.path | remove_first: dir | remove_first: "/" -%}
+  {%- endif -%}
+  {%- assign parts = rel | split: "/" -%}
+  {%- if parts.size > 0 and parts[0] != "" -%}
+    {%- if parts.size == 1 -%}
+      {%- assign fn = parts[0] -%}
+      {%- unless fn == "index.md" or fn == "README.md" or fn == "CONTRIBUTING.md" or fn == "LICENSE" -%}
+        {%- assign dirpages = dirpages | push: p -%}
+      {%- endunless -%}
+    {%- else -%}
+      {%- assign sd = parts[0] -%}
+      {%- unless subdirs contains sd -%}
+        {%- assign subdirs = subdirs | push: sd -%}
+      {%- endunless -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<ul class="toc-level">
+{%- for sd in subdirs | sort -%}
+  {%- assign child_dir = sd -%}
+  {%- if dir != "" -%}
+    {%- assign child_dir = dir | append: "/" | append: sd -%}
+  {%- endif -%}
+  <li class="toc-folder">
+    <details {% if include.expand == "all" or depth == 0 %}open{% endif %}>
+      <summary>📁 {{ sd }}</summary>
+      {%- assign next_depth = depth | plus: 1 -%}
+      {%- include toc-tree.html dir=child_dir depth=next_depth expand=include.expand -%}
+    </details>
+  </li>
+{%- endfor -%}
+{%- for p in dirpages -%}
+  {%- assign title = p.name | remove: ".md" | remove: ".markdown" -%}
+  <li class="toc-file"><a href="{{ p.url | relative_url }}">📄 {{ title }}</a></li>
+{%- endfor -%}
+</ul>
