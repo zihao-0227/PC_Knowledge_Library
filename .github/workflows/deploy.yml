@@ -54,7 +54,8 @@ jobs:
         run: |
           mkdir -p content
           cp -r 购买记 使用记 上网记 软件记 维护记 维修记 引用图片 content/
-          cp 知识库前言.md content/index.md
+          printf -- '---\ntitle: 🧠 计算机知识库\n---\n\n' > content/index.md
+          cat 知识库前言.md >> content/index.md
 
       - name: Build Quartz
         run: npx quartz build
