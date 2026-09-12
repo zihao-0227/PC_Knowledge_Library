@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-OneDrive → GitHub 知识库同步脚本
+SharePoint → GitHub 知识库同步脚本
 使用 MSAL 客户端凭证模式，无需手动刷新 Token
 使用文件夹 ID 替代路径，更稳定可靠
 """
@@ -19,9 +19,9 @@ TENANT_ID = os.environ["AZURE_TENANT_ID"]
 CLIENT_ID = os.environ["AZURE_CLIENT_ID"]
 CLIENT_SECRET = os.environ["AZURE_CLIENT_SECRET"]
 
-# 要同步的 OneDrive 文件夹 ID（PC_Knowledges_Library）
-# 主子（孙梓豪）的 OneDrive
-ROOT_FOLDER_ID = "012NGUUTGUIEX7XCQZWJG2YYXTHNKB4T35"
+# 要同步的 SharePoint 文件夹 ID（学习站「学习资料库」/ PC_Knowledge_Library）
+# https://xanvel.sharepoint.com/sites/xanvel-learn
+ROOT_FOLDER_ID = "01GMSBW4QKNRKHPCKSVNEK2TQHEDXH7GR3"
 # 使用 GITHUB_WORKSPACE（GitHub Actions 自动设置）或默认路径
 GITHUB_WORKSPACE = os.environ.get("GITHUB_WORKSPACE", "/github/workspace")
 LOCAL_REPO = Path(os.environ.get("LOCAL_REPO_PATH", GITHUB_WORKSPACE))
@@ -30,9 +30,8 @@ SYNC_LOG = LOCAL_REPO / ".github" / "sync_status.json"
 SCOPE = ["https://graph.microsoft.com/.default"]
 GRAPH_BASE = "https://graph.microsoft.com/v1.0"
 
-# OneDrive Drive ID
-# 主子（孙梓豪）的 OneDrive
-DRIVE_ID = os.environ.get("AZURE_DRIVE_ID", "b!wS48PsmSfUeaRye7R1-TA3ZoBt8x3oNFm7Sw36_aPalPUNlhlwU_SLopxX6Q-Ni5")
+# SharePoint「学习资料库」Drive ID（xanvel.sharepoint.com）
+DRIVE_ID = os.environ.get("AZURE_SP_DRIVE_ID", "b!iwgiFn4OqEWqDN4LOop2OGkJxQbRsNtAqPQz3T0_2B5asSNnqGFXR5vHy1LYk9RO")
 
 
 # ── 认证 ──────────────────────────────────────────────────
@@ -52,9 +51,9 @@ def get_token():
     return result["access_token"]
 
 
-# ── 读取 OneDrive 文件结构 ────────────────────────────────
+# ── 读取 SharePoint 文件结构 ────────────────────────────────
 def list_onedrive_files(token, folder_id=ROOT_FOLDER_ID):
-    """递归列出 OneDrive 文件夹下所有文件（基于文件夹 ID，不用路径）"""
+    """递归列出 SharePoint 文件夹下所有文件（基于文件夹 ID，不用路径）"""
     headers = {"Authorization": f"Bearer {token}"}
     files = []
 
@@ -141,7 +140,7 @@ def download_file(token, download_url, local_path):
 # ── 主流程 ────────────────────────────────────────────────
 def main():
     print("=" * 50)
-    print("📚 知识库同步：OneDrive → GitHub")
+    print("📚 知识库同步：SharePoint → GitHub")
     print(f"📂 文件夹 ID: {ROOT_FOLDER_ID}")
     print(f"📂 本地仓库路径: {LOCAL_REPO}")
     print("=" * 50)
@@ -149,12 +148,12 @@ def main():
     # 1. 获取 Token
     token = get_token()
 
-    # 2. 读取 OneDrive 文件列表
-    print("\n🔍 扫描 OneDrive 文件...")
+    # 2. 读取 SharePoint 文件列表
+    print("\n🔍 扫描 SharePoint 文件...")
     remote_files = list_onedrive_files(token)
 
     if not remote_files:
-        print("  ⚠️ OneDrive 中没有文件，请检查文件夹 ID")
+        print("  ⚠️ SharePoint 中没有文件，请检查文件夹 ID")
         sys.exit(0)
 
     # 3. 逐文件同步
@@ -205,7 +204,7 @@ def main():
     print("\n🧹 检查已删除的文件...")
     remote_paths = {rf["path"] for rf in remote_files}
 
-    # 仓库基础设施文件——不在 OneDrive 中，但必须保留
+    # 仓库基础设施文件——不在 SharePoint 中，但必须保留
     PROTECTED_FILES = {
         "README.md", "LICENSE", ".gitignore",
         "package.json", "package-lock.json", "quartz.config.yaml",
