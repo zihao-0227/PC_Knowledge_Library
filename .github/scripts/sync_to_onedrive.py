@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-GitHub → OneDrive 知识库反向同步脚本
-当 GitHub 仓库有新的推送时，自动将变更同步到 OneDrive
+GitHub → SharePoint 知识库反向同步脚本
+当 GitHub 仓库有新的推送时，自动将变更同步到 SharePoint
 """
 import os
 import sys
@@ -18,8 +18,10 @@ TENANT_ID = os.environ["AZURE_TENANT_ID"]
 CLIENT_ID = os.environ["AZURE_CLIENT_ID"]
 CLIENT_SECRET = os.environ["AZURE_CLIENT_SECRET"]
 
-ROOT_FOLDER_ID = "012NGUUTGUIEX7XCQZWJG2YYXTHNKB4T35"
-DRIVE_ID = os.environ["AZURE_DRIVE_ID"]
+# SharePoint 学习站「学习资料库」/ PC_Knowledge_Library 文件夹 ID
+ROOT_FOLDER_ID = "01GMSBW4QKNRKHPCKSVNEK2TQHEDXH7GR3"
+# SharePoint「学习资料库」Drive ID（支持 AZURE_SP_DRIVE_ID 覆盖）
+DRIVE_ID = os.environ.get("AZURE_SP_DRIVE_ID", "b!iwgiFn4OqEWqDN4LOop2OGkJxQbRsNtAqPQz3T0_2B5asSNnqGFXR5vHy1LYk9RO")
 
 # GitHub Actions 自动设置的工作目录
 LOCAL_REPO = Path(os.environ.get("GITHUB_WORKSPACE", "/github/workspace"))
@@ -49,9 +51,9 @@ def get_token():
     return result["access_token"]
 
 
-# ── OneDrive 文件操作 ─────────────────────────────────────
+# ── SharePoint 文件操作 ─────────────────────────────────────
 def list_onedrive_files(token, folder_id=ROOT_FOLDER_ID):
-    """递归列出 OneDrive 文件夹下所有文件（和正向同步保持一致）"""
+    """递归列出 SharePoint 文件夹下所有文件（和正向同步保持一致）"""
     headers = {"Authorization": f"Bearer {token}"}
     files = []
 
@@ -105,12 +107,12 @@ def list_onedrive_files(token, folder_id=ROOT_FOLDER_ID):
             next_link = resp2.json().get("@odata.nextLink")
 
     recurse(folder_id)
-    print(f"  📄 OneDrive 中现有 {len(files)} 个文件")
+    print(f"  📄 SharePoint 中现有 {len(files)} 个文件")
     return files
 
 
 def find_or_create_folder(token, parent_id, folder_name):
-    """在 OneDrive 中查找或创建文件夹"""
+    """在 SharePoint 中查找或创建文件夹"""
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
     
     # 先查找
@@ -144,7 +146,7 @@ def find_or_create_folder(token, parent_id, folder_name):
 
 
 def ensure_folder_path(token, path_parts):
-    """确保 OneDrive 中的文件夹路径存在，返回最终文件夹 ID"""
+    """确保 SharePoint 中的文件夹路径存在，返回最终文件夹 ID"""
     current_id = ROOT_FOLDER_ID
     for part in path_parts:
         if not part:
@@ -210,7 +212,7 @@ def upload_large_file(token, local_path, parent_id, filename):
 
 
 def upload_file_to_onedrive(token, local_path, relative_path):
-    """上传文件到 OneDrive"""
+    """上传文件到 SharePoint"""
     path_parts = relative_path.split("/")
     filename = path_parts[-1]
     folder_parts = path_parts[:-1]
@@ -236,7 +238,7 @@ def upload_file_to_onedrive(token, local_path, relative_path):
 
 
 def delete_onedrive_file(token, item_id, path_name):
-    """删除 OneDrive 中的文件"""
+    """删除 SharePoint 中的文件"""
     headers = {"Authorization": f"Bearer {token}"}
     url = f"{GRAPH_BASE}/drives/{DRIVE_ID}/items/{item_id}"
     resp = requests.delete(url, headers=headers)
@@ -291,16 +293,16 @@ def file_sha256(path):
 # ── 主流程 ────────────────────────────────────────────────
 def main():
     print("=" * 50)
-    print("📚 知识库反向同步：GitHub → OneDrive")
-    print(f"📂 OneDrive 文件夹 ID: {ROOT_FOLDER_ID}")
+    print("📚 知识库反向同步：GitHub → SharePoint")
+    print(f"📂 SharePoint 文件夹 ID: {ROOT_FOLDER_ID}")
     print(f"📂 本地仓库: {LOCAL_REPO}")
     print("=" * 50)
 
     # 1. 获取 Token
     token = get_token()
 
-    # 2. 读取 OneDrive 文件列表（建立 path → id 映射）
-    print("\n🔍 扫描 OneDrive...")
+    # 2. 读取 SharePoint 文件列表（建立 path → id 映射）
+    print("\n🔍 扫描 SharePoint...")
     od_files = list_onedrive_files(token)
     od_by_path = {f["path"]: f for f in od_files}
     od_paths = set(od_by_path.keys())
@@ -312,7 +314,7 @@ def main():
     local_by_path = {f["path"]: f for f in local_files}
 
     # 4. 计算差异
-    # 需上传的：GitHub 有但 OneDrive 没有，或大小不同
+    # 需上传的：GitHub 有但 SharePoint 没有，或大小不同
     uploads = []
     for lf in local_files:
         if lf["path"] not in od_paths:
@@ -320,7 +322,7 @@ def main():
         elif od_by_path[lf["path"]]["size"] != lf["size"]:
             uploads.append(lf["path"])
     
-    # 需删除的：OneDrive 有但 GitHub 没有
+    # 需删除的：SharePoint 有但 GitHub 没有
     deletions = []
     for od_path in od_paths:
         if od_path not in local_paths:
@@ -332,7 +334,7 @@ def main():
 
     # 5. 执行上传
     if uploads:
-        print(f"\n📤 上传到 OneDrive...")
+        print(f"\n📤 上传到 SharePoint...")
         upload_ok = 0
         upload_fail = 0
         for rel_path in uploads:
@@ -352,7 +354,7 @@ def main():
 
     # 6. 执行删除
     if deletions:
-        print(f"\n🗑️  删除 OneDrive 中已移除的文件...")
+        print(f"\n🗑️  删除 SharePoint 中已移除的文件...")
         del_ok = 0
         del_fail = 0
         for del_path in deletions:
