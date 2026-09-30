@@ -14,6 +14,7 @@ configuration:
     - .obsidian
     - "**/开发者*"
     - "**/该知识库的所有文件.base"
+    - "**/引用图片/*.md"          # 仅供文章引用图片，目录页不进导航
   theme:
     fontOrigin: googleFonts
     cdnCaching: true
