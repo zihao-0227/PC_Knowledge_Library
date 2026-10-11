@@ -88,7 +88,7 @@ Windows Sandbox 的开启办法主要有两种，一种是通过传统的控制�
 > 根据微软官方的说法，自 Windows 11 22H2 版本开始，如果你在虚拟机内部进行重启操作（如通过开始菜单，或通过`shutdown /r /t 0`命令），系统会为你保留重启之前的所有数据。
 
 - **会和虚拟机软件抢硬件虚拟化**：如果你装了 VMware 或 VirtualBox，可能会和沙盒背后的 Hyper-V 打架，表现为虚拟机变慢、报错甚至打不开。共存关系和处理办法，见[虚拟机篇](../维护记/虚拟机篇.md)。
-- **可能会导致 Windows 更新出错**：近期部分 Windows Insider 预览用户可能会遇到 Windows 更新 0x80073712 报错，微软怀疑就是 Windows 沙盒出现的问题，官方的建议就是临时禁用沙盒来获取更新。
+- **可能会导致 Windows 更新出错**：近期部分 Windows Insider 预览用户可能会遇到 Windows 更新 0x80073712 报错，微软怀疑就是 Windows 沙盒出现的问题，官方的建议就是临时禁用沙盒来获取更新。详见 [Windows Insider 发行说明（Build 26340.9596）](https://learn.microsoft.com/en-us/windows-insider/release-notes/experimental/preview-build-26340-9596)。
 
 
 
