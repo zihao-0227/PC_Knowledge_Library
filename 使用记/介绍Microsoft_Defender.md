@@ -5,6 +5,21 @@
 
 如果你被朋友这样问过，那这篇文章可以帮你回答：**其实 Windows 一直自带杀毒软件**，而且默认就开着。它就是 Microsoft Defender。
 
+# 先分清：几个都叫「Defender」的东西
+
+"Defender" 是微软安全产品线共用的一个名字，搜索的时候很容易看串。先认清楚：
+
+| 名字 | 是什么 | 在哪 |
+| --- | --- | --- |
+| **Microsoft Defender 防病毒**（Antivirus） | Windows 内置的杀毒引擎，**本文主角** | 系统自带，打开「Windows 安全中心」就能看到 |
+| **Windows 安全中心**（Windows Security） | Windows 的安全控制面板，把防病毒、防火墙、账户保护等集中在一起 | 开始菜单搜索「Windows 安全中心」 |
+| **Microsoft Defender 防火墙**（Firewall） | Windows 自带的网络防火墙，管哪些程序能联网 | Windows 安全中心 →「防火墙和网络保护」 |
+| **Microsoft Defender**（Microsoft 365 版） | Microsoft 365 个人版/家庭版附带的跨设备安全应用，主打身份监控、网页防护和多设备管理 | 需要单独安装，支持 Windows / macOS / Android / iOS |
+| **Microsoft Defender for Endpoint** | 企业级终端防护平台，学校或公司的 IT 部门在用 | 本文不涉及 |
+
+> [!tip] 小提示
+> 本文讲的是**第一行**：Windows 自带的 Microsoft Defender 防病毒，以及它的控制面板「Windows 安全中心」。如果你在 Microsoft 365 里看到一个叫 Microsoft Defender 的应用，那是另一个产品。
+
 # 先认识一下：Defender 是什么
 
 Microsoft Defender 防病毒（Microsoft Defender Antivirus）是 Windows 内置的杀毒软件，从你装好系统那一刻起就在工作。它会持续监视病毒、恶意软件和其他安全威胁，并自动下载更新来保持防护能力。
@@ -40,7 +55,11 @@ Defender 的操作界面叫 **Windows 安全中心（Windows Security）**。
 > [!tip] 小提示
 > 日常 90% 的操作都在「病毒和威胁防护」里，记住这一个入口就够了。
 
+![Windows 安全中心首页](../引用图片/使用记/介绍MicrosoftDefender/安全性概览.png)
+
 # 病毒和威胁防护：日常就用这几个
+
+![病毒和威胁防护](../引用图片/使用记/介绍MicrosoftDefender/病毒和威胁防护.png)
 
 ## 扫一扫
 
@@ -66,6 +85,8 @@ Defender 的操作界面叫 **Windows 安全中心（Windows Security）**。
 Defender 拦下的东西不会直接消失，而是记在「**保护历史记录**」里。
 
 这里能看到：它什么时候拦了什么、威胁等级、以及处理结果（已隔离 / 已删除 / 已允许）。如果你确定某个文件是误报，也可以在这里把它恢复。
+
+![保护历史记录](../引用图片/使用记/介绍MicrosoftDefender/保护历史记录.png)
 
 > [!warning] 注意
 > 恢复文件前先想清楚：Defender 报的"威胁"大多数时候不是空穴来风。拿不准就别恢复。
@@ -93,6 +114,42 @@ Defender 拦下的东西不会直接消失，而是记在「**保护历史记录
 这也是为什么你会看到「**Windows 已保护你的电脑**」这种蓝屏提示——它不是 Defender 在报毒，而是 SmartScreen 在说："这个东西我没见过，你确定要开吗？"
 
 SmartScreen 的设置入口在「**应用和浏览器控制**」→「基于信誉的保护」。
+
+![应用和浏览器控制](../引用图片/使用记/介绍MicrosoftDefender/应用和浏览器控制.png)
+
+# 其他板块速览
+
+除了上面这些，Windows 安全中心还有几个板块，日常不一定天天用，但了解一下没坏处。
+
+## 账户保护
+
+管账户和登录安全：Microsoft 账户状态、Windows Hello、动态锁，以及管理员保护。
+
+![账户保护](../引用图片/使用记/介绍MicrosoftDefender/账户保护.png)
+
+## 防火墙和网络保护
+
+控制哪些程序能联网，以及不同网络类型（域 / 专用 / 公用）下的防火墙状态。
+
+![防火墙和网络保护](../引用图片/使用记/介绍MicrosoftDefender/防火墙和网络保护.png)
+
+## 设备安全性
+
+内核隔离、安全处理器、数据加密（BitLocker）等硬件级安全能力。
+
+![设备安全性](../引用图片/使用记/介绍MicrosoftDefender/设备安全性.png)
+
+## 设备性能和运行状况
+
+生成设备健康报告，检查存储、电池、应用和 Windows 时间服务等有没有问题。
+
+![设备性能和运行状况](../引用图片/使用记/介绍MicrosoftDefender/设备性能和运行状况.png)
+
+## 家庭选项
+
+家长控制相关：屏幕使用时间、活动报告、家庭设备管理等。
+
+![家庭选项](../引用图片/使用记/介绍MicrosoftDefender/家庭选项.png)
 
 # 常见问题
 
