@@ -100,11 +100,11 @@ Defender 拦下的东西不会直接消失，而是记在「**保护历史记录
 - 你打开一个网站，它先查这个网址有没有被举报过钓鱼、挂马
 - 如果查不到信誉记录，它会弹一个警告，让你自己决定
 
-![SmartScreen网站保护.png](../引用图片/使用记/介绍MicrosoftDefender/SmartScreen网站保护.png)
+![SmartScreen网站保护示例](../引用图片/使用记/介绍MicrosoftDefender/SmartScreen网站保护.png)
 
 这也是为什么你会看到「**Windows 已保护你的电脑**」这种蓝屏提示——它不是 Defender 在报毒，而是 SmartScreen 在说："这个东西我没见过，你确定要开吗？"
 
-![SmartScreen.png](../引用图片/使用记/介绍MicrosoftDefender/SmartScreen.png)
+![SmartScreen提示Windows已保护你的电脑](../引用图片/使用记/介绍MicrosoftDefender/SmartScreen.png)
 
 
 SmartScreen 的设置入口在「**应用和浏览器控制**」→「基于信誉的保护」。
@@ -117,7 +117,7 @@ SmartScreen 的设置入口在「**应用和浏览器控制**」→「基于信�
 
 ## 账户保护
 
-管账户和登录安全：Microsoft 账户状态、Windows Hello、动态锁，以及在[介绍管理员权限与UAC](使用记/介绍管理员权限与UAC)提过的管理员保护。
+管账户和登录安全：Microsoft 账户状态、Windows Hello、动态锁，以及在[介绍管理员权限与UAC](./介绍管理员权限与UAC)提过的管理员保护。
 
 ![账户保护](../引用图片/使用记/介绍MicrosoftDefender/账户保护.png)
 
